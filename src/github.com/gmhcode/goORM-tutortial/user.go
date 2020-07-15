@@ -118,5 +118,20 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic("Could not connect to the database")
 	}
+	w.Header().Set("Content-Type", "application/json")
+
+	var userUpdates User
+	var user User
+	//decodes the user from the body and turns it into data
+	_ = json.NewDecoder(r.Body).Decode(&userUpdates)
+
+	db.Where("name = ?", userUpdates.Name).Find(&user)
+
+	user.Email = userUpdates.Email
+	user.Name = userUpdates.Name
+
+	db.Save(&user)
+
+	json.NewEncoder(w).Encode(user)
 	fmt.Fprintf(w, "Update User Endpoint Hit")
 }

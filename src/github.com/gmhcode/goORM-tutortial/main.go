@@ -20,7 +20,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/users", AllUsers).Methods("GET")
 	myRouter.HandleFunc("/user", NewUser).Methods("POST")
 	myRouter.HandleFunc("/user/{name}", DeleteUser).Methods("DELETE")
-	myRouter.HandleFunc("/user/{name}/{email}", UpdateUser).Methods("PUT")
+	myRouter.HandleFunc("/user", UpdateUser).Methods("PUT")
 	log.Fatal(http.ListenAndServe(":8080", myRouter))
 }
 
