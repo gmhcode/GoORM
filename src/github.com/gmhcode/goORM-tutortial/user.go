@@ -17,35 +17,34 @@ var err error
 //User struct
 type User struct {
 	gorm.Model
-	ID    int `gorm:"AUTO_INCREMENT"`
 	Name  string
 	Email string
 }
 
 //InitialMigration for database
 func InitialMigration() {
-	db, err = gorm.Open("sqlite3", "test.db")
-	if err != nil {
-		fmt.Println(err.Error())
-		panic("Failed to connect to database")
-	}
-	// defer db.Close()
+	// db, err = gorm.Open("sqlite3", "test.db")
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// 	panic("Failed to connect to database")
+	// }
+	// // defer db.Close()
 
-	db.AutoMigrate(&User{})
+	// db.AutoMigrate(&User{})
 }
 
 //AllUsers Returns all the users
 func AllUsers(w http.ResponseWriter, r *http.Request) {
 	// db, err = gorm.Open("sqlite3", "test.db")
-	if err != nil {
-		panic("Could not connect to the database")
-	}
-	// defer db.Close()
-	//Create an empty array of users
-	var users []User
-	//Finds all users
-	db.Find(&users)
-	json.NewEncoder(w).Encode(users)
+	// if err != nil {
+	// 	panic("Could not connect to the database")
+	// }
+	// // defer db.Close()
+	// //Create an empty array of users
+	// var users []User
+	// //Finds all users
+	// db.Find(&users)
+	// json.NewEncoder(w).Encode(users)
 	fmt.Fprintf(w, "All Users Endpoint Hit")
 }
 
@@ -73,17 +72,26 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	//prints the user json
 	fmt.Println(string(str))
 
-	db.Create(&user)
-	///old way, where the user properties were in the parameters of the url
-	// vars := mux.Vars(r)
-	// name := vars["name"]
-	// email := vars["email"]
-	// db.Create(&User{Name: name, Email: email})
+	name := user.Name
+	email := user.Email
+	db.Create(&User{Name: name, Email: email})
+
 	if err != nil {
 		panic("Could not connect to the database")
 	}
 	fmt.Fprintf(w, "New User Endpoint Hit")
 }
+
+// //OldNewUserFunc getting user info from parameters
+// func OldNewUserFunc(w http.ResponseWriter, r *http.Request) {
+// 	if err != nil {
+// 		panic("Could not connect to the database")
+// 	}
+// 	vars := mux.Vars(r)
+// 	name := vars["name"]
+// 	email := vars["email"]
+// 	db.Create(&User{Name: name, Email: email})
+// }
 
 //DeleteUser Deletes a user
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
