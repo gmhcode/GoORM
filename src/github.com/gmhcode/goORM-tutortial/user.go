@@ -23,28 +23,28 @@ type User struct {
 
 //InitialMigration for database
 func InitialMigration() {
-	// db, err = gorm.Open("sqlite3", "test.db")
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	panic("Failed to connect to database")
-	// }
-	// // defer db.Close()
+	db, err = gorm.Open("sqlite3", "test.db")
+	if err != nil {
+		fmt.Println(err.Error())
+		panic("Failed to connect to database")
+	}
+	// defer db.Close()
 
-	// db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{})
 }
 
 //AllUsers Returns all the users
 func AllUsers(w http.ResponseWriter, r *http.Request) {
-	// db, err = gorm.Open("sqlite3", "test.db")
-	// if err != nil {
-	// 	panic("Could not connect to the database")
-	// }
-	// // defer db.Close()
-	// //Create an empty array of users
-	// var users []User
-	// //Finds all users
-	// db.Find(&users)
-	// json.NewEncoder(w).Encode(users)
+	db, err = gorm.Open("sqlite3", "test.db")
+	if err != nil {
+		panic("Could not connect to the database")
+	}
+	// defer db.Close()
+	//Create an empty array of users
+	var users []User
+	//Finds all users
+	db.Find(&users)
+	json.NewEncoder(w).Encode(users)
 	fmt.Fprintf(w, "All Users Endpoint Hit")
 }
 
