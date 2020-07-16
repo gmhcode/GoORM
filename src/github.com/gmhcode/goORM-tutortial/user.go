@@ -17,6 +17,7 @@ var err error
 //User struct
 type User struct {
 	gorm.Model
+	UUID  string `gorm:"unique;not null"`
 	Name  string
 	Email string
 }
@@ -71,10 +72,12 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	str, err := json.Marshal(&user)
 	//prints the user json
 	fmt.Println(string(str))
-
-	name := user.Name
-	email := user.Email
-	db.Create(&User{Name: name, Email: email})
+	// uuid := user.UUID
+	// name := user.Name
+	// email := user.Email
+	db.Where("UUID = ?", user.UUID).FirstOrCreate(&user)
+	// db.Create(&user).FirstOrCreate(&user)
+	// db.Create(&User{Name: name, Email: email, UUID: uuid}).FirstOrCreate()
 
 	if err != nil {
 		panic("Could not connect to the database")
